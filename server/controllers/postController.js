@@ -14,7 +14,7 @@ module.exports = (req, res) => {
     url: req.body.url
   })
   .then(
-   fetch('http://google.com/')
+   fetch(req.body.url)
     .then(function(res) {
       return res.text();
     }).then(function(body) {
