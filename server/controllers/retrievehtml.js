@@ -19,6 +19,12 @@ module.exports = (req, res) => {
   });
 };
 
+//build the queue
+  //normalize two async processes
+  //decouples the adding of things into a queue and the receiving back
+  //accept list of urls, then picks up the urls from your queue and then begins the download process
+  //name variables camel case
+
 
 
 // Create a job queue whose workers fetch data from a URL and store the results in a database.  The job queue should expose a REST API for adding jobs and checking their status / results.

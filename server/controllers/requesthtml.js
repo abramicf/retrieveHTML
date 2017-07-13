@@ -1,21 +1,11 @@
 const Sequelize = require('sequelize');
 const connection = require('../db');
 const urltohtml = require('../models/urltohtml');
-const fetch = require('node-fetch');
 const validUrl = require('valid-url');
 const utils = require('../utils');
+const chron = new require('chron')();
 
-insertHTML = (html, idInfo) => {
-  // res.send(html);
-  urltohtml.update({
-    retrievedHTML: html,
-  }, {
-    fields: ['retrievedHTML'],
-    where: {
-      id: idInfo
-    }
-  });
-};
+let queue = [];
 
 module.exports = (req, res) => {
 
@@ -27,17 +17,15 @@ module.exports = (req, res) => {
       url: url
     })
     .then((data) => {
+      //stick it into the queue
+      let queueTask = {
+        id: data.id,
+        url: url
+      };
+
+      queue.push(queueTask);
       res.send('Request for HTML is being made - your jobid is ' + data.id);
-      fetch(url)
-        .then((response) => {
-          return response.text();
-        })
-        .then((response) => {
-          insertHTML(response, data.id);
-        });
-        // .catch(() => {
-        //   res.send('Error: HTML data not available for this URL');
-        // });
+      console.log(queue);
     })
     .catch(() => {
       res.send('Error posting to database - please retry');
