@@ -13,14 +13,33 @@ module.exports = (req, res) => {
   urltohtml.create({
     url: req.body.url
   })
-  .then(
-   fetch(req.body.url)
-    .then(function(res) {
-      return res.text();
-    }).then(function(body) {
-      res.send(body);
-    })
-  );
+  .then((data) => {
+    // res.send(data);
+    fetch(req.body.url)
+      .then((response) => {
+        return response.text();
+      })
+      .then((html) => {
+        // res.send(html);
+        urltohtml.update({
+          retrievedHTML: html,
+        }, {
+          fields: ['retrievedHTML'],
+          where: {
+            id: data.id
+          }
+        });
+      })
+      .then(() => {
+        res.send('Information successfully retrieved!');
+      })
+      .catch(() => {
+        res.send('Error retrieving information from database');
+      });
+  })
+  .catch(() => {
+    res.send('Error posting to database - please retry');
+  });
 };
 
 
