@@ -2,44 +2,50 @@ const Sequelize = require('sequelize');
 const connection = require('../db');
 const urltohtml = require('../models/urltohtml');
 const fetch = require('node-fetch');
-// const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-// var afterLoad = require('after-load');
-// afterLoad('https://google.com', function(html){
-//    console.log(html);
-// });
+const validUrl = require('valid-url');
+const utils = require('../utils');
+
 
 
 module.exports = (req, res) => {
-  urltohtml.create({
-    url: req.body.url
-  })
-  .then((data) => {
-    // res.send(data);
-    fetch(req.body.url)
-      .then((response) => {
-        return response.text();
-      })
-      .then((html) => {
-        // res.send(html);
-        urltohtml.update({
-          retrievedHTML: html,
-        }, {
-          fields: ['retrievedHTML'],
-          where: {
-            id: data.id
-          }
+
+  let url = utils.addHttp(req.body.url);
+
+  if (validUrl.isUri(url)) {
+
+    urltohtml.create({
+      url: url
+    })
+    .then((data) => {
+      // res.send(data);
+      fetch(url)
+        .then((response) => {
+          return response.text();
+        })
+        .then((html) => {
+          // res.send(html);
+          urltohtml.update({
+            retrievedHTML: html,
+          }, {
+            fields: ['retrievedHTML'],
+            where: {
+              id: data.id
+            }
+          });
+        })
+        .then(() => {
+          res.send('Information successfully retrieved!');
+        })
+        .catch(() => {
+          res.send('Error retrieving information from database');
         });
-      })
-      .then(() => {
-        res.send('Information successfully retrieved!');
-      })
-      .catch(() => {
-        res.send('Error retrieving information from database');
-      });
-  })
-  .catch(() => {
-    res.send('Error posting to database - please retry');
-  });
+    })
+    .catch(() => {
+      res.send('Error posting to database - please retry');
+    });
+  } else {
+    res.send('Please supply valid URL');
+  }
 };
 
 
