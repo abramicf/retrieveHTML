@@ -5,7 +5,17 @@ const fetch = require('node-fetch');
 const validUrl = require('valid-url');
 const utils = require('../utils');
 
-
+insertHTML = (html, idInfo) => {
+  // res.send(html);
+  urltohtml.update({
+    retrievedHTML: html,
+  }, {
+    fields: ['retrievedHTML'],
+    where: {
+      id: idInfo
+    }
+  });
+};
 
 module.exports = (req, res) => {
 
@@ -17,28 +27,17 @@ module.exports = (req, res) => {
       url: url
     })
     .then((data) => {
-      // res.send(data);
+      res.send('Request for HTML is being made - your jobid is ' + data.id);
       fetch(url)
         .then((response) => {
           return response.text();
         })
-        .then((html) => {
-          // res.send(html);
-          urltohtml.update({
-            retrievedHTML: html,
-          }, {
-            fields: ['retrievedHTML'],
-            where: {
-              id: data.id
-            }
-          });
-        })
-        .then(() => {
-          res.send('Information successfully retrieved!');
-        })
-        .catch(() => {
-          res.send('Error retrieving information from database');
+        .then((response) => {
+          insertHTML(response, data.id);
         });
+        // .catch(() => {
+        //   res.send('Error: HTML data not available for this URL');
+        // });
     })
     .catch(() => {
       res.send('Error posting to database - please retry');
@@ -47,6 +46,10 @@ module.exports = (req, res) => {
     res.send('Please supply valid URL');
   }
 };
+
+//Considerations not accounted for:
+
+//1.  URLs that are set up correctly, but that don't point to an active page.  The provider (like ATT) still provides us some HTML.
 
 
 

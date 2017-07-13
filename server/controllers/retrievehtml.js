@@ -8,7 +8,14 @@ module.exports = (req, res) => {
       id: req.body.jobid
     }
   }).then((data) => {
-    res.send(data.retrievedHTML);
+    // res.send(data);
+    if (data.retrievedHTML === null) {
+      res.send('html in process of being retrieved - please check back later');
+    } else {
+      res.send(data.retrievedHTML);
+    }
+  }).catch(() => {
+    res.send('Error: jobid not in database - please ensure that the body of your request is formatted as json and in the following format: "jobid": " >> your jobid << "');
   });
 };
 
