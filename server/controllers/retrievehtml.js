@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-// const connection = require('../db');
 const urltohtml = require('../models/urltohtml');
 
 module.exports = (req, res) => {
@@ -19,16 +18,3 @@ module.exports = (req, res) => {
   });
 };
 
-//build the queue
-  //normalize two async processes
-  //decouples the adding of things into a queue and the receiving back
-  //accept list of urls, then picks up the urls from your queue and then begins the download process
-  //name variables camel case
-
-
-
-// Create a job queue whose workers fetch data from a URL and store the results in a database.  The job queue should expose a REST API for adding jobs and checking their status / results.
-
-// Example:
-
-// User submits www.google.com to your endpoint.  The user gets back a job id. Your system fetches www.google.com (the result of which would be HTML) and stores the result.  The user asks for the status of the job id and if the job is complete, he gets a response that includes the HTML for www.google.com

@@ -14,30 +14,20 @@ module.exports = {
     }
   },
 
-  fetchHTML: (url) => {
+  fetchHTML: (url, id) => {
     fetch(url)
       .then((response) => {
         return response.text();
       })
-      .then((response) => {
-        insertHTML(response, data.id);
+      .then((html) => {
+        urltohtml.update({
+          retrievedHTML: html,
+        }, {
+          fields: ['retrievedHTML'],
+          where: {
+            id: id
+          }
+        });
       });
-    },
-
-
-  insertHTML: (html, idInfo) => {
-    // res.send(html);
-    urltohtml.update({
-      retrievedHTML: html,
-    }, {
-      fields: ['retrievedHTML'],
-      where: {
-        id: idInfo
-      }
-    });
   }
-
-
-
-
 };
