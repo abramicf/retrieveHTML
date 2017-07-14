@@ -1,11 +1,9 @@
-// const pg = require('pg');
 const Sequelize = require('sequelize');
 const connection = require('../db');
 
-const urltohtml = connection.define('urltohtml', {
-  //http://docs.sequelizejs.com/manual/tutorial/models-definition.html
+const urlToHtml = connection.define('urltohtml', {
   url: Sequelize.TEXT,
-  retrievedHTML: Sequelize.TEXT
+  retrievedHtml: Sequelize.TEXT
 });
 
-module.exports = urltohtml;
+module.exports = urlToHtml;

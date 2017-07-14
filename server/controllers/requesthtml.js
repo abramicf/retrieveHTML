@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const urltohtml = require('../models/urltohtml');
+const urlToHtml = require('../models/urlToHtml');
 const validUrl = require('valid-url');
 const fetch = require('node-fetch');
 const utils = require('../utils');
@@ -16,12 +16,16 @@ clearQueue = () => {
   console.log('Queue Cleared!');
 };
 
-chron.add(5, clearQueue);
+//clear the queue by running the 'clearQueue' function every 45 seconds
+chron.add(45, clearQueue);
 
 module.exports = (req, res) => {
+  //Handle cases where users forget to put 'http://' at the beginning of the URL'
   let url = utils.addHttp(req.body.url);
+  //validate URL
   if (validUrl.isUri(url)) {
-    urltohtml.create({
+    //If URL is valid, add URL to db, receive id back from db, and add task to queue
+    urlToHtml.create({
       url: url
     })
     .then((data) => {
