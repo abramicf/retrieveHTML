@@ -12,7 +12,7 @@ To get started:
 
   a.  psql postgres
 
-  b.  CREATE SCHEMA createhtmldb;
+  b.  CREATE DATABASE retrievehtmldb;
 
 5.  Inside the db.js file, configure the username (currently 'abramicf') to your username
 
