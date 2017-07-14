@@ -5,7 +5,9 @@ To get started:
 1.  Clone this repo to your machine
 
 2.  Install postgres (if not already on your machine)
+
   a.  In terminal window, type 'psql postgres'
+
   b.  Execute following command: CREATE SCHEMA createhtmldb;
 
 3.  Inside the db.js file, configure the username (currently 'abramicf') to your username
